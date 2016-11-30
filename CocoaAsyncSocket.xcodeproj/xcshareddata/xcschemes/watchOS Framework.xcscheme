@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3D1CED681DEE84C400D3EBCC"
-               BuildableName = "watchOS CocoaAsyncSocket.framework"
+               BuildableName = "CocoaAsyncSocket.framework"
                BlueprintName = "watchOS CocoaAsyncSocket"
                ReferencedContainer = "container:CocoaAsyncSocket.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D1CED681DEE84C400D3EBCC"
-            BuildableName = "watchOS CocoaAsyncSocket.framework"
+            BuildableName = "CocoaAsyncSocket.framework"
             BlueprintName = "watchOS CocoaAsyncSocket"
             ReferencedContainer = "container:CocoaAsyncSocket.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D1CED681DEE84C400D3EBCC"
-            BuildableName = "watchOS CocoaAsyncSocket.framework"
+            BuildableName = "CocoaAsyncSocket.framework"
             BlueprintName = "watchOS CocoaAsyncSocket"
             ReferencedContainer = "container:CocoaAsyncSocket.xcodeproj">
          </BuildableReference>
