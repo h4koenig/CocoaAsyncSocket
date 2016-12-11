@@ -16,7 +16,7 @@
 #endif
 
 #if TARGET_OS_IPHONE
-  #import <CFNetwork/CFNetwork.h>
+//  #import <CFNetwork/CFNetwork.h>
   #import <UIKit/UIKit.h>
 #endif
 
@@ -426,7 +426,7 @@ enum GCDAsyncUdpSocketConfig
 		#if TARGET_OS_IPHONE
 		[[NSNotificationCenter defaultCenter] addObserver:self
 		                                         selector:@selector(applicationWillEnterForeground:)
-		                                             name:UIApplicationWillEnterForegroundNotification
+		                                             name:NSExtensionHostWillEnterForegroundNotification
 		                                           object:nil];
 		#endif
 	}
@@ -4876,12 +4876,15 @@ static void CFWriteStreamCallback(CFWriteStreamRef stream, CFStreamEventType typ
 	}
 	
 	// Ensure the CFStream's don't close our underlying socket
-	
+
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
+
 	CFReadStreamSetProperty(readStream4, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
 	CFWriteStreamSetProperty(writeStream4, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
 	
 	CFReadStreamSetProperty(readStream6, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
 	CFWriteStreamSetProperty(writeStream6, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
+#endif
 	
 	return YES;
 	

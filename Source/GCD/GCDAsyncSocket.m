@@ -10,12 +10,22 @@
 
 #import "GCDAsyncSocket.h"
 
+//#if TARGET_OS_IPHONE
+//#import <CFNetwork/CFNetwork.h>
+//#if !TARGET_OS_TV
+//#import <PushKit/PushKit.h>
+//#endif
+//#endif
+
 #if TARGET_OS_IPHONE
-#import <CFNetwork/CFNetwork.h>
-#if !TARGET_OS_TV
-#import <PushKit/PushKit.h>
+    #if !TARGET_OS_WATCH
+        #import <CFNetwork/CFNetwork.h>
+        #if !TARGET_OS_TV
+            #import <PushKit/PushKit.h>
+        #endif
+    #endif
 #endif
-#endif
+
 
 #import <TargetConditionals.h>
 #import <arpa/inet.h>
@@ -6609,6 +6619,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 
 - (void)ssl_startTLS
 {
+ #if !TARGET_OS_WATCH
 	LogTrace();
 	
 	LogVerbose(@"Starting TLS (via SecureTransport)...");
@@ -7041,6 +7052,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	// Start the SSL Handshake process
 	
 	[self ssl_continueSSLHandshake];
+#else
+    NSLog(@"SSL not supported on watch");
+#endif
 }
 
 - (void)ssl_continueSSLHandshake
@@ -7237,6 +7251,7 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 
 - (void)cf_startTLS
 {
+ #if !TARGET_OS_WATCH
 	LogTrace();
 	
 	LogVerbose(@"Starting TLS (via CFStream)...");
@@ -7320,6 +7335,9 @@ static OSStatus SSLWriteFunction(SSLConnectionRef connection, const void *data, 
 	}
 	
 	LogVerbose(@"Waiting for SSL Handshake to complete...");
+#else
+    NSLog(@"SSL not supported on watch");
+#endif
 }
 
 #endif
@@ -7618,11 +7636,13 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	// The kCFStreamPropertyShouldCloseNativeSocket property should be false by default (for our case).
 	// But let's not take any chances.
 	
+#if TARGET_OS_IPHONE && !TARGET_OS_WATCH
 	if (readStream)
 		CFReadStreamSetProperty(readStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
 	if (writeStream)
 		CFWriteStreamSetProperty(writeStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanFalse);
-	
+#endif
+
 	if ((readStream == NULL) || (writeStream == NULL))
 	{
 		LogWarn(@"Unable to create read and write stream...");
@@ -7923,9 +7943,17 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	LogVerbose(@"Enabling backgrouding on socket");
 	
+#if !TARGET_OS_TV
+    #if !TARGET_OS_WATCH
+
+        r1 = CFReadStreamSetProperty(readStream, kCFStreamNetworkServiceType, PKPushTypeVoIP);
+    r2 = CFWriteStreamSetProperty(writeStream, kCFStreamNetworkServiceType, PKPushTypeVoIP);
+    #endif
+#else
 	r1 = CFReadStreamSetProperty(readStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
 	r2 = CFWriteStreamSetProperty(writeStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
-	
+#endif
+
 	if (!r1 || !r2)
 	{
 		return NO;

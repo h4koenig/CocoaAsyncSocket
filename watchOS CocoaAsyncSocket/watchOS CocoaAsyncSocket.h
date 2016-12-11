@@ -2,8 +2,7 @@
 //  watchOS CocoaAsyncSocket.h
 //  watchOS CocoaAsyncSocket
 //
-//  Created by Heinrich Koenig on 11/29/16.
-//  Copyright © 2016 Robbie Hanson. All rights reserved.
+//  Created by Heinrich Koenig on 12/7/16.
 //
 
 #import <WatchKit/WatchKit.h>
